@@ -2,6 +2,7 @@ package models.service.impl;
 
 import models.entity.customer.Customer;
 import models.entity.customer.CustomerType;
+import models.entity.employee.Employee;
 import models.service.CustomerService;
 import models.utils.MyReadFile;
 import models.utils.MyWriteFile;
@@ -79,10 +80,9 @@ public class CustomerServiceImpl implements CustomerService {
         String email = scanner.nextLine();
         System.out.println("Please enter customerType: ");
         String customerType = getCustomerType();
-        String address;
-        System.out.println("Please enter address: ");
-        address = scanner.nextLine();
         scanner.nextLine();
+        System.out.println("Please enter address: ");
+        String address = scanner.nextLine();
 
         return new Customer(customerCode, fullName, dateOfBirth, gender, idCardNumber, phoneNumber, email, customerType, address);
     }
@@ -108,8 +108,67 @@ public class CustomerServiceImpl implements CustomerService {
         }
     }
 
+    private void displayUpdateMenu() {
+        System.out.println("Select fields to update by number: ");
+        System.out.println("0. Exit");
+        System.out.println("1. Employee Code");
+        System.out.println("2. Full Name");
+        System.out.println("3. Date Of Birth");
+        System.out.println("4. Gender");
+        System.out.println("5. Id Card Number");
+        System.out.println("6. Phone Number");
+        System.out.println("7. Email");
+        System.out.println("8. Customer Type");
+        System.out.println("9. Address");
+    }
+
+    private void updateCustomerCode(Customer customer) {
+        System.out.println("Enter new employee code: ");
+        customer.setCustomerCode(scanner.nextLine());
+    }
+
+    private void updateFullName(Customer customer) {
+        System.out.println("Enter new employee name: ");
+        customer.setFullName(scanner.nextLine());
+    }
+
+    private void updateDateOfBirth(Customer customer) {
+        System.out.println("Enter new date of birth: ");
+        customer.setDateOfBirth(scanner.nextLine());
+    }
+
+    private void updateGender(Customer customer) {
+        System.out.println("Enter new gender: ");
+        customer.setGender(scanner.nextLine());
+    }
+
+    private void updateIdCardNumber(Customer customer) {
+        System.out.println("Enter new id card number: ");
+        customer.setIdCardNumber(scanner.nextLine());
+    }
+
+    private void updatePhoneNumber(Customer customer) {
+        System.out.println("Enter new phone number: ");
+        customer.setPhoneNumber(scanner.nextLine());
+    }
+
+    private void updateEmail(Customer customer) {
+        System.out.println("Enter new email: ");
+        customer.setEmail(scanner.nextLine());
+    }
+
+    private void updateCustomerType(Customer customer) {
+        String newLiteracy = getCustomerType();
+        customer.setCustomerType(newLiteracy);
+    }
+
+    private void updateAddress(Customer customer) {
+        System.out.println("Enter new address: ");
+        customer.setAddress(scanner.nextLine());
+    }
+
     public void update() {
-        System.out.println("Enter the ID of the customer you want to edit:");
+        System.out.println("Enter the ID of the customer you want to edit: ");
         long targetId = scanner.nextLong();
         scanner.nextLine();
 
@@ -123,20 +182,54 @@ public class CustomerServiceImpl implements CustomerService {
         }
 
         if (targetCustomer != null) {
-            System.out.println("Current details of the customer:");
+            System.out.println("Current details of the customer: ");
             System.out.println(targetCustomer.getInfo());
 
-            Customer updateCustomer = getInfo();
+            int choice;
+            do {
+                displayUpdateMenu();
 
-            targetCustomer.setCustomerCode(updateCustomer.getCustomerCode());
-            targetCustomer.setFullName(updateCustomer.getFullName());
-            targetCustomer.setDateOfBirth(updateCustomer.getDateOfBirth());
-            targetCustomer.setGender(updateCustomer.getGender());
-            targetCustomer.setIdCardNumber(updateCustomer.getIdCardNumber());
-            targetCustomer.setPhoneNumber(updateCustomer.getPhoneNumber());
-            targetCustomer.setEmail(updateCustomer.getEmail());
-            targetCustomer.setCustomerType(updateCustomer.getCustomerType());
-            targetCustomer.setAddress(updateCustomer.getAddress());
+                System.out.println("Select a field to update (or enter 0 to exit): ");
+                choice = scanner.nextInt();
+                scanner.nextLine();
+
+                switch (choice) {
+                    case 0:
+                        System.out.println("Exiting update menu.");
+                        break;
+                    case 1:
+                        updateCustomerCode(targetCustomer);
+                        break;
+                    case 2:
+                        updateFullName(targetCustomer);
+                        break;
+                    case 3:
+                        updateDateOfBirth(targetCustomer);
+                        break;
+                    case 4:
+                        updateGender(targetCustomer);
+                        break;
+                    case 5:
+                        updateIdCardNumber(targetCustomer);
+                        break;
+                    case 6:
+                        updatePhoneNumber(targetCustomer);
+                        break;
+                    case 7:
+                        updateEmail(targetCustomer);
+                        break;
+                    case 8:
+                        updateCustomerType(targetCustomer);
+                        break;
+                    case 9:
+                        updateAddress(targetCustomer);
+                        break;
+                    default:
+                        System.out.println("Invalid choice.");
+                        break;
+                }
+
+            } while (choice != 0);
 
             MY_WRITE_FILE.writeCustomerFile(DATA_PATH, customers);
             System.out.println("Customer details updated successfully.");
